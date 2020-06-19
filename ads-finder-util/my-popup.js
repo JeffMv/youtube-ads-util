@@ -12,12 +12,9 @@ document.addEventListener('DOMContentLoaded', function () {
   function onpaste (event) {
     let pastedText = (event.clipboardData || window.clipboardData).getData('text');
 
-    let sjson = JSON.parse(pastedText);
-    let videoId = sjson.ad_docid;
-    // alert("videoId: " + String(videoId));
+    let url = getAdVideoUrl(pastedText)
     let resultMessage = "";
-    if (videoId) {
-      let url = "https://www.youtube.com/watch?v=" + videoId;
+    if (url) {
       window.open(url, "_blank");
       resultMessage = "The URL has been ... Processed"
     } else {
@@ -53,4 +50,34 @@ document.addEventListener('DOMContentLoaded', function () {
   //   div.textContent = `${res.count} bears`
   //   document.body.appendChild(div)
   // }
+
+  function getAdVideoUrl(entry) {
+    let url = undefined;
+    let infos = JSON.parse(entry)
+    if (infos) {
+      let videoId = infos.ad_docid;
+      url = "https://www.youtube.com/watch?v=" + videoId;
+    } else if (typeof entry === "string") {
+      const reVidId = /^([a-zA-Z0-9-]{11})$/
+      if (entry.trim().indexOf("http") === 0) {
+        url = entry
+      } else if (entry.match(reVidId)) {
+        let res = entry.match(reVidId)
+        let videoId = ""
+        url = "https://www.youtube.com/watch?v=" + videoId;
+      }
+    }
+    return url
+  }
+
+  function openVideoWithData(str) {
+    let url = getAdVideoUrl(str)
+    if (url) {
+      window.open(url, "_blank");
+      return true
+    } else {
+      return false
+    }
+  }
+
 }, false)
