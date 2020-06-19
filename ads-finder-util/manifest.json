@@ -1,15 +1,18 @@
 {
-  "name": "bear",
+  "name": "Youtube Ads Finder",
   "version": "1.0",
   "manifest_version": 2,
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
+      "matches": [
+        "https://*.youtube.com/watch?*",
+        "https://youtube.com/watch?*"
+      ],
       "js": ["content.js"]
     }
   ],
   "browser_action": {
-    "default_title": "Bear"
+    "default_title": "Youtube Ads Finder"
   },
   "background": {
     "scripts": ["background.js"]
